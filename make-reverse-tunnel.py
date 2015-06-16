@@ -74,10 +74,6 @@ sh('sudo mv {0} {1}'.format(dupPlist, targetPlist))
 # make sure plist has the right permissions
 sh('sudo chown root:wheel {}'.format(targetPlist))
 
-# todo: run the initial connection to add to known_hosts
-# print('After the key is added to known_hosts, hit Ctrl-C')
-# sh('ssh -i {0} -NT -R {1}:localhost:22 {2}@{3}'.format(identityFile, args.serverport, args.serverusername, args.serveraddress))
-
 # launch daemon on client
 sh('sudo launchctl load {}'.format(targetPlist))
 
