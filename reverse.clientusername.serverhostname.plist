@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>reverse.clientusername.serverhostname</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>ssh</string>
+		<string>-NTC</string>
+		<string>-o ServerAliveInterval=60</string>
+		<string>-o ExitOnForwardFailure=yes</string>
+		<string>-i /Users/clientusername/.ssh/reverse-clientusername-serverhostname</string>
+		<string>-R serverport:localhost:22</string>
+		<string>serverusername@serveraddress</string>
+	</array>
+	<key>UserName</key>
+	<string>clientusername</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+</dict>
+</plist>
