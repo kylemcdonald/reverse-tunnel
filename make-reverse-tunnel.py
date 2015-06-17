@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python
 
 import argparse
 import glob, re, shutil, fileinput, os, sys
