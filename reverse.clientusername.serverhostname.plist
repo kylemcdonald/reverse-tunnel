@@ -10,7 +10,8 @@
 		<string>-NTC</string>
 		<string>-o ServerAliveInterval=60</string>
 		<string>-o ExitOnForwardFailure=yes</string>
-		<string>-i /Users/clientusername/.ssh/reverse-clientusername-serverhostname</string>
+		<string>-i</string>
+		<string>/Users/clientusername/.ssh/reverse-clientusername-serverhostname</string>
 		<string>-R serverport:localhost:22</string>
 		<string>serverusername@serveraddress</string>
 	</array>
