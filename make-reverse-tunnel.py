@@ -38,6 +38,8 @@ if args.delete:
 	# sh('sudo systemsetup -setremotelogin off') # this will disable other tunnels
 	# also: Remove the client's public key from the server's authorized_keys
 	# also: Remove the server's public key from the client's known_hosts
+	print('- ' * 40)
+	print('Done!')
 	sys.exit(0)
 
 # make sure remote login is on (in the sharing settings)
@@ -53,7 +55,7 @@ sh('ssh-add {}'.format(identityFile))
 keyEchoCommand = 'cat {}.pub'.format(identityFile)
 if not args.allowcommands:
 	keyEchoCommand = 'echo "command=\\"\\",no-pty `{}`"'.format(keyEchoCommand)
-keySshCommand = '{0} | ssh {1}@{2} "umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_keys"'.format(keyEchoCommand, args.serverusername, args.serveraddress)
+keySshCommand = '{0} | ssh {1}@{2} "umask 077; (test -d .ssh || (mkdir .ssh ; ssh-keygen -f .ssh/id_rsa -P \\"\\")) ; cat >> .ssh/authorized_keys; cat .ssh/*.pub" >> ~/.ssh/authorized_keys'.format(keyEchoCommand, args.serverusername, args.serveraddress)
 sh(keySshCommand) # this will ask for server password unless already configured for ssh
 
 # copy and create plist
@@ -77,7 +79,12 @@ sh('sudo chown root:wheel {}'.format(targetPlist))
 # launch daemon on client
 sh('sudo launchctl load {}'.format(targetPlist))
 
+print('- ' * 40)
+print('Done! If you ssh into the server, now you can reverse tunnel to this client:')
+print('\tssh {0}@{1}'.format(args.serverusername, args.serveraddress))
+print('\tssh {0}@localhost -p {1}'.format(args.clientusername, args.serverport))
+if not args.allowcommands:
+	print('If you want to ssh into the server from the client, you will need to type:')
+	print('\tssh -o PubKeyAuthentication=no {0}@{1}'.format(args.serverusername, args.serveraddress))
 print('To make the server reconnect faster, ssh into the server and run:')
 print('\techo "ClientAliveInterval 60" | sudo tee -a /etc/ssh/sshd_config ; sudo restart ssh')
-print('Done! You can now reverse ssh here from the server:')
-print('\tssh {0}@localhost -p {1}'.format(args.clientusername, args.serverport))
