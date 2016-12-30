@@ -26,22 +26,22 @@ def replaceInFile(filename, pattern, replacement):
 		print re.sub(pattern, replacement, line),
 
 systemName = platform.system()
-ubuntu = False
+linux = False
 if systemName == 'Linux':
 	print 'Using systemd on Linux'
-	ubuntu = True
+	linux = True
 elif systemName == 'Darwin':
 	print 'Using launchd on Mac'
 else:
 	print 'Platform {} not supported, exiting.'.format(systemName)
 	sys.exit()
 
-if not args.delete and ubuntu:
+if not args.delete and linux:
 	sh('sudo apt-get install openssh-server')
 	sh('eval "$(ssh-agent)"')
 
 # prepare name of keepalive script
-if ubuntu:
+if linux:
 	sourceScript = 'reverse.clientusername.serverhostname.service'
 	dupScript = sourceScript
 	dupScript = re.sub('serverhostname', args.serverhostname, dupScript)
@@ -55,12 +55,12 @@ else:
 	targetScript = os.path.join('/Library/LaunchDaemons', dupScript)
 
 # prepare name of identity file
-homePrefix = '/home' if ubuntu else '/Users'
+homePrefix = '/home' if linux else '/Users'
 serviceName = 'reverse.{}.{}'.format(args.clientusername, args.serverhostname)
 identityFile = '{}/{}/.ssh/{}'.format(homePrefix, args.clientusername, serviceName)
 
 if args.delete:
-	if ubuntu:
+	if linux:
 		sh('sudo systemctl stop {}'.format(serviceName))
 		sh('sudo systemctl disable {}'.format(serviceName))
 	else:
@@ -75,7 +75,7 @@ if args.delete:
 	print('Done!')
 	sys.exit(0)
 
-if not ubuntu:
+if not linux:
 	# make sure remote login is on (in the sharing settings)
 	sh('sudo systemsetup -setremotelogin on')
 
@@ -105,7 +105,7 @@ replaceInFile(dupScript, 'clientusername', args.clientusername)
 sh('sudo mv {0} {1}'.format(dupScript, targetScript))
 
 # make sure script has the right permissions and launch daemon on client
-if ubuntu:
+if linux:
 	sh('sudo chown root:root {}'.format(targetScript))
 	sh('sudo chmod 644 {}'.format(targetScript))
 	sh('sudo systemctl restart {}'.format(serviceName))
