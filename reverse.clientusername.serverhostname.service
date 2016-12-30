@@ -4,8 +4,8 @@ ConditionPathExists=|/usr/bin
 After=network.target
 
 [Service]
-User=localuser
-ExecStart=/usr/bin/ssh -NTC -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -i /home/clientusername/.ssh/reverse.clientusername.serverhostname -R serverport:localhost:22 serverusername@serveraddress
+User=clientusername
+ExecStart=/usr/bin/ssh -NTC -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -i ~/.ssh/reverse.clientusername.serverhostname -R serverport:localhost:22 serverusername@serveraddress
 
 # Restart every >2 seconds to avoid StartLimitInterval failure
 RestartSec=3
