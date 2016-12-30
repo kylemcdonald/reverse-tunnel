@@ -1,4 +1,4 @@
-# osx-reverse-tunnel
+# reverse-tunnel
 
 Make an ssh reverse tunnel from a Mac or Linux client to a Linux server.
 
